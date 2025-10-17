@@ -1,0 +1,75 @@
+plugins {
+    id("groovy")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+
+    id("io.micronaut.library") version "4.4.5"
+    id("io.micronaut.aot") version "4.4.5"
+
+    id("maven-publish")
+}
+
+// TODO: Update group and version number if applicable
+group = 'org.maurodata.plugins'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    // TODO: Uncomment this line to depend on snapshot versions of Mauro
+    // maven {url "https://mauro-repository.com/libs-snapshot-local"}
+}
+
+dependencies {
+    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
+    implementation("io.micronaut:micronaut-jackson-databind")
+    compileOnly("io.micronaut.security:micronaut-security-annotations")
+    implementation("io.micronaut.security:micronaut-security-session")
+    compileOnly("io.micronaut:micronaut-inject-groovy")
+    compileOnly("io.micronaut.data:micronaut-data-processor")
+    runtimeOnly("org.yaml:snakeyaml")
+
+    // Change this to depend on a different version of Mauro
+    implementation('org.maurodata:mauro-domain:0.0.1-beta')
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("uk.ac.ox.softeng.mauro.*", "org.maurodata.*")
+    }
+    aot {
+        // Please review carefully the optimizations enabled below
+        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
+        optimizeServiceLoading = false
+        convertYamlToJava = false
+        precomputeOperations = true
+        cacheEnvironment = true
+        optimizeClassLoading = true
+        deduceEnvironment = true
+        optimizeNetty = true
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+// TODO: Uncomment this to publish to the Mauro Snapshot Repository
+/*
+publishing {
+    repositories {
+        maven {
+            name = "MauroSnapshotRepository"
+            url = "https://mauro-repository.com/libs-snapshot-local"
+            credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+}
+*/
