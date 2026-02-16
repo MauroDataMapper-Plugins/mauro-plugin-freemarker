@@ -1,14 +1,14 @@
 plugins {
     id("groovy")
-    id("io.micronaut.library") version "4.5.4"
-    id("io.micronaut.aot") version "4.4.5"
+    id("io.micronaut.library") version "4.6.1"
+    id("io.micronaut.aot") version "4.6.1"
     id("com.gradleup.shadow") version "8.3.6"
     id("maven-publish")
 }
 
 // TODO: Update group and version number if applicable
 group = 'org.maurodata.plugins'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 
 repositories {
     mavenLocal()
@@ -18,18 +18,21 @@ repositories {
 }
 
 dependencies {
-    implementation("io.micronaut.groovy:micronaut-runtime-groovy")
-    implementation("io.micronaut:micronaut-jackson-databind")
+    compileOnly("io.micronaut.groovy:micronaut-runtime-groovy")
+    compileOnly("io.micronaut:micronaut-jackson-databind")
     compileOnly("io.micronaut.security:micronaut-security-annotations")
-    implementation("io.micronaut.security:micronaut-security-session")
+    compileOnly("io.micronaut.security:micronaut-security-session")
     compileOnly("io.micronaut:micronaut-inject-groovy")
     compileOnly("io.micronaut.data:micronaut-data-processor")
-    runtimeOnly("org.yaml:snakeyaml")
+    // runtimeOnly("org.yaml:snakeyaml")
+
+    compileOnly("io.micronaut:micronaut-core-reactive")
+    aotPlugins("io.micronaut:micronaut-core-reactive")
 
     // Change this to depend on a different version of Mauro
-    implementation('org.maurodata:mauro-domain:0.0.1-beta')
-    implementation('org.maurodata:mauro-persistence:0.0.1-beta')
-    implementation('org.maurodata:mauro-api:0.0.1-beta')
+    compileOnly('org.maurodata:mauro-domain:0.0.2-beta')
+    compileOnly('org.maurodata:mauro-persistence:0.0.2-beta')
+    compileOnly('org.maurodata:mauro-api:0.0.2-beta')
 
     implementation('org.freemarker:freemarker:2.3.34')
 }

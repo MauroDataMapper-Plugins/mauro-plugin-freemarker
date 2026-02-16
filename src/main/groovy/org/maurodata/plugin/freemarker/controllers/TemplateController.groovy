@@ -4,8 +4,7 @@ import org.maurodata.domain.diff.ObjectDiff
 import org.maurodata.domain.model.AdministeredItem
 import org.maurodata.domain.model.Model
 import org.maurodata.domain.security.Role
-import org.maurodata.persistence.model.AdministeredItemContentRepository
-import org.maurodata.persistence.model.ModelContentRepository
+import org.maurodata.persistence.model.AdministeredItemRepository
 import org.maurodata.persistence.model.PathRepository
 import org.maurodata.security.AccessControlService
 
@@ -43,7 +42,7 @@ import java.nio.file.Paths
 class TemplateController {
 
     @Inject
-    List<AdministeredItemContentRepository> administeredItemContentRepositories
+    List<AdministeredItemRepository> administeredItemRepositories
 
     @Inject
     AccessControlService accessControlService
@@ -52,9 +51,9 @@ class TemplateController {
     PathRepository pathRepository
 
     @NonNull
-    AdministeredItemContentRepository getAdministeredItemContentRepository(final String domainType) {
+    AdministeredItemRepository getAdministeredItemRepository(final String domainType) {
 
-        administeredItemContentRepositories.find {
+        administeredItemRepositories.find {
             final String simpleName = it.getClass().simpleName
 
             simpleName != 'AdministeredItemContentRepository' &&
@@ -64,17 +63,11 @@ class TemplateController {
     }
 
     AdministeredItem getWithContents(final String domainType, final UUID itemId) {
-        AdministeredItemContentRepository specificAdministeredItemContentRepository = getAdministeredItemContentRepository(domainType)
+        AdministeredItemRepository specificAdministeredItemContentRepository = getAdministeredItemRepository(domainType)
         if (specificAdministeredItemContentRepository == null) {
             throw new HttpStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "TMP01: No supporting service for domainType ${domainType}")
         }
-        AdministeredItem itemWithContents
-        // TODO: Technical debt: inconsistent naming of readWithContentById and findWithContentById
-        if (specificAdministeredItemContentRepository instanceof ModelContentRepository) {
-            itemWithContents = ((ModelContentRepository) specificAdministeredItemContentRepository).findWithContentById(itemId)
-        } else {
-            itemWithContents = specificAdministeredItemContentRepository.readWithContentById(itemId)
-        }
+        AdministeredItem itemWithContents = specificAdministeredItemRepository.loadWithContent(itemId)
 
         if (itemWithContents == null) {
             throw new HttpStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "TMP02: Cannot find item of type: ${domainType} with id: ${itemId}")
