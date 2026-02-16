@@ -30,7 +30,7 @@ dependencies {
     aotPlugins("io.micronaut:micronaut-core-reactive")
 
     // Change this to depend on a different version of Mauro
-    compileOnly('org.maurodata:mauro-domain:0.0.2-beta')
+    compileOnly('org.maurodata:mauro-domain:0.0.2-SNAPSHOT')
     compileOnly('org.maurodata:mauro-persistence:0.0.2-beta')
     compileOnly('org.maurodata:mauro-api:0.0.2-beta')
 
