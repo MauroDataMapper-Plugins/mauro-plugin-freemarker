@@ -13,8 +13,6 @@ version = '0.0.2-SNAPSHOT'
 repositories {
     mavenLocal()
     mavenCentral()
-
-    maven {url "https://mauro-repository.com/libs-snapshot-local"}
 }
 
 dependencies {
@@ -62,18 +60,24 @@ java {
     targetCompatibility = JavaVersion.toVersion("17")
 }
 
-// TODO: Uncomment this to publish to the Mauro Snapshot Repository
-/*
-publishing {
-    repositories {
-        maven {
-            name = "MauroSnapshotRepository"
-            url = "https://mauro-repository.com/libs-snapshot-local"
-            credentials(PasswordCredentials)
-            authentication {
-                basic(BasicAuthentication)
+plugins.withId("maven-publish") {
+    publishing {
+        publications {
+            create("mavenJava", MavenPublication) {
+                from(components["java"])
+                artifactId = "${rootProject.name}"
+            }
+        }
+
+        repositories {
+            maven {
+                name = "MauroSnapshotRepository"
+                url = "https://mauro-repository.com/libs-snapshot-local"
+                credentials(PasswordCredentials)
+                authentication {
+                    basic(BasicAuthentication)
+                }
             }
         }
     }
 }
-*/
