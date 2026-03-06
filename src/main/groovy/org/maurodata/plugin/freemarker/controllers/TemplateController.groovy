@@ -63,8 +63,8 @@ class TemplateController {
     }
 
     AdministeredItem getWithContents(final String domainType, final UUID itemId) {
-        AdministeredItemRepository specificAdministeredItemContentRepository = getAdministeredItemRepository(domainType)
-        if (specificAdministeredItemContentRepository == null) {
+        AdministeredItemRepository specificAdministeredItemRepository = getAdministeredItemRepository(domainType)
+        if (specificAdministeredItemRepository == null) {
             throw new HttpStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "TMP01: No supporting service for domainType ${domainType}")
         }
         AdministeredItem itemWithContents = specificAdministeredItemRepository.loadWithContent(itemId)
