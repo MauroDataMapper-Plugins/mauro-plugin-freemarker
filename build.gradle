@@ -32,7 +32,7 @@ dependencies {
     compileOnly('org.maurodata:mauro-persistence:0.0.2-beta')
     compileOnly('org.maurodata:mauro-api:0.0.2-beta')
 
-    implementation('org.freemarker:freemarker:2.3.34')
+    implementation('org.freemarker:freemarker:2.3.35')
 }
 
 micronaut {
